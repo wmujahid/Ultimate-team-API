@@ -34,7 +34,7 @@ public class TeamController {
         if(team.isPresent()){
             return team;
         } else {
-            throw new Exception("team with id " + teamId + " not found");
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
         }
     }
 
@@ -71,7 +71,14 @@ public class TeamController {
     }
 
     @DeleteMapping("/team/{teamId}")
-    public String deleteTeam(@PathVariable(value = "teamId") Long teamId) {
-        return "deleting the team with the id of " + teamId;
+    public Optional<Team> deleteTeam(@PathVariable(value = "teamId") Long teamId) {
+
+        Optional team = teamRepository.findById(teamId);
+        if(team.isPresent()){
+            teamRepository.deleteById(teamId);
+            return team;
+        } else {
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
+        }
     }
 }
