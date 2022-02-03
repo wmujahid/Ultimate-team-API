@@ -1,5 +1,7 @@
 package com.project.ultimateteam.controller;
 
+import com.project.ultimateteam.exception.InformationExistException;
+import com.project.ultimateteam.exception.InformationNotFoundException;
 import com.project.ultimateteam.model.Team;
 import com.project.ultimateteam.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +21,15 @@ public class TeamController {
         this.teamRepository = teamRepository;
     }
 
+    // Get all teams
     @GetMapping(path = "/team/")
-    public List<Team> getTeam() {
+    public List<Team> getAllTeams() {
         return teamRepository.findAll();
     }
 
+    // Get team by id
     @GetMapping(path = "/team/{teamId}")
-    public Optional getTeam(@PathVariable Long teamId) throws Exception {
+    public Optional getATeam(@PathVariable Long teamId) throws Exception {
         Optional team = teamRepository.findById(teamId);
         if(team.isPresent()){
             return team;
@@ -34,9 +38,17 @@ public class TeamController {
         }
     }
 
+    // Create a team and throw an exception if it
     @PostMapping("/team/")
-    public String createTeam(@RequestBody String body) {
-        return "creating a team " + body;
+    public Team createTeam(@RequestBody Team teamObject) {
+
+        Team team = teamRepository.findByName(teamObject.getTeamName());
+
+        if(team != null){
+            throw new InformationExistException("team with name " + team.getTeamName() + " already exists");
+        } else {
+            return teamRepository.save(teamObject);
+        }
     }
 
     @PutMapping("/team/{teamId}")
