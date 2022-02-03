@@ -16,11 +16,6 @@ public class TeamController {
 
     private TeamRepository teamRepository;
 
-    @Autowired
-    public void setTeamRepository(TeamRepository teamRepository){
-        this.teamRepository = teamRepository;
-    }
-
     // Get all teams
     @GetMapping(path = "/team/")
     public List<Team> getAllTeams() {
@@ -52,6 +47,7 @@ public class TeamController {
         }
     }
 
+    // Update team by id
     @PutMapping("/team/{teamId}")
     public Team updateTeam(@PathVariable(value = "teamId") Long teamId, @RequestBody Team teamObject) {
         Optional<Team> team = teamRepository.findById(teamId);
@@ -70,6 +66,7 @@ public class TeamController {
         }
     }
 
+    // Delete team by id
     @DeleteMapping("/team/{teamId}")
     public Optional<Team> deleteTeam(@PathVariable(value = "teamId") Long teamId) {
 
