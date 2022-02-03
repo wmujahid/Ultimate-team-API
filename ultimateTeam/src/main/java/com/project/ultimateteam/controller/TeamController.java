@@ -41,6 +41,7 @@ public class TeamController {
     // Create a team and throw an exception if it
     @PostMapping("/team/")
     public Team createTeam(@RequestBody Team teamObject) {
+        //  the @RequestBody annotation maps the HttpRequest body to an object
 
         Team team = teamRepository.findByName(teamObject.getTeamName());
 
@@ -52,8 +53,21 @@ public class TeamController {
     }
 
     @PutMapping("/team/{teamId}")
-    public String updateTeam(@PathVariable(value = "teamId") Long teamId, @RequestBody String body) {
-        return "updating the team with the id of " + teamId + body;
+    public Team updateTeam(@PathVariable(value = "teamId") Long teamId, @RequestBody Team teamObject) {
+        Optional<Team> team = teamRepository.findById(teamId);
+
+        if(team.isPresent()){
+            if(teamObject.getTeamName().equals(team.get().getTeamName())){
+                throw new InformationExistException("no changes were made to team " + team.get().getTeamName());
+            } else {
+                Team updateTeam = teamRepository.findById(teamId).get();
+                updateTeam.setTeamName(teamObject.getTeamName());
+                updateTeam.setDescription(teamObject.getDescription());
+                return teamRepository.save(updateTeam);
+            }
+        } else {
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
+        }
     }
 
     @DeleteMapping("/team/{teamId}")
