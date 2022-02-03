@@ -15,6 +15,27 @@ public class Team {
 
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
