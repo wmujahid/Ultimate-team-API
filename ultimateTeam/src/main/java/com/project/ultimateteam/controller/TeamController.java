@@ -1,20 +1,37 @@
 package com.project.ultimateteam.controller;
 
 import com.project.ultimateteam.model.Team;
+import com.project.ultimateteam.repository.TeamRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api")
 public class TeamController {
 
+    private TeamRepository teamRepository;
+
+    @Autowired
+    public void setTeamRepository(TeamRepository teamRepository){
+        this.teamRepository = teamRepository;
+    }
+
     @GetMapping(path = "/team/")
-    public String getTeam() {
-        return "get all teams";
+    public List<Team> getTeam() {
+        return teamRepository.findAll();
     }
 
     @GetMapping(path = "/team/{teamId}")
-    public String getTeam(@PathVariable Long teamId) {
-        return "getting the team with the id of " + teamId;
+    public Optional getTeam(@PathVariable Long teamId) throws Exception {
+        Optional team = teamRepository.findById(teamId);
+        if(team.isPresent()){
+            return team;
+        } else {
+            throw new Exception("team with id " + teamId + " not found");
+        }
     }
 
     @PostMapping("/team/")
