@@ -1,18 +1,24 @@
 # Ultimate-team-API
 
 ## General Approach: 
+My goal here is to create a Ultimate Team API. I want to create a full application with a js form for a frontend that allowed users to sumbit form data on a webpage. This form data will then be sent to my database with API calls and finallay displayed again on the webpage. I also want to implement users so that each users is able manipulate their Teams. Finally, my last goal is to create a way for users to play pit their teams against other user Teams.
+
 
 ## My Entity Relationship Diagram (ERD):
 ![](./UltimateTeam.png)
 
 ## User Stories
-- As a user, I should be able to start a new tic tac toe game
-- As a user, I should be able to click on a square to add X first and then O, and so on
-- As a user, I should be shown a message after each turn for if I win, lose, tie
-- As a user, I should not be able to click the same square twice
-- As a user, I should be shown a message when I win, lose or tie
-- As a user, I should not be able to continue playing once I win, lose, or tie
-- As a user, I should be able to play the game again without refreshing the page
+- As a user, I should be able to create a team or multiple teams
+- As a user, I should be able to give my team(s) a name and description
+- As a user, I should be able to create a player for my team
+- As a user, I should be able to create many players for a team
+- As a user, I should have access to CRUD methods for my player(s) and team(s)
+- As a user, I should be able to create a coach
+- As a user, I should not be able to create more than one coach per team
+- As a user, I should have access to CRUD methods for my coach(es)
+- As a user, I should be able to create a stadium
+- As a user, I should not be able to create more than one stadium per team
+- As a user, I should have access to CRUD methods for my stadium(s)
 
 ## Endpoints
 
@@ -52,7 +58,6 @@
 | GET _/api/teams/{teamId}/stadiums/{stadiumId}_ | Get A Stadium | PUBLIC |
 | DELETE _/api/teams/{teamId}/stadiums/{stadiumId}_ | DELETE A Stadium | PUBLIC |
 
-## Challenges:
 
 ## Technology used:
 
@@ -63,24 +68,6 @@
 - Postman for testing endpoints
 - Vanilla Javascript, CSS and HTML
 
+## Challenges:
+I encountered a few issues implemetning users
 
-## Objectives
-- title
-- 3x3 grid
-    * the grid should be clickable
-    * the grid cells should have the correct player sign displayed an information display
-- should display a message informing the current player it’s their turn
-    * should show us who won the game
-    * should show us if the game ended in a draw
-- restart button
-    * will restart the entire game
-- needs to track any clicks that happen on our cells
-- needs to check if a valid move has been made
-    * needs to make sure nothing happens if an already played cell has been clicked
-- we should update our game state
-- we should validate the game state
-    * check if a player has won
-    * check if the game ended in a draw
-- either stop the game or change the active player, depending on the above checks
-- reflect the updates made on the UI
-- rinse and repeat
