@@ -51,20 +51,29 @@ public class TeamController {
         return teamService.deleteTeam(teamId);
     }
 
-    @PostMapping("/teams/players")
+    @PostMapping("/teams/{teamId}/players")
     public Player createPlayer(@RequestBody Player playerObject) {
         //  the @RequestBody annotation maps the HttpRequest body to an object
         return teamService.createPlayer(playerObject);
     }
-    // Get all teams
-    @GetMapping(path = "/teams/players")
+
+    @GetMapping(path = "/teams/{teamId}/players")
     public List<Player> getAllPlayers() {
         return teamService.getAllPlayers();
     }
 
-    // Get team by id
-    @GetMapping(path = "/teams/{playerId}")
+    @GetMapping(path = "/teams/{teamId}/players/{playerId}")
     public Optional getAPlayer(@PathVariable Long playerId) {
         return teamService.getAPlayer(playerId);
+    }
+
+    @PutMapping("/teams/{teamId}/players/{playerId}")
+    public Player updatePlayer(@PathVariable(value = "teamId") Long teamId, @RequestBody Team teamObject) {
+        return teamService.updatePlayer(teamId, teamObject);
+    }
+
+    @DeleteMapping("/teams/{teamId}/players/{playerId}")
+    public String deletePlayer(@PathVariable(value = "playerId") Long playerId) {
+        return teamService.deletePlayer(playerId);
     }
 }

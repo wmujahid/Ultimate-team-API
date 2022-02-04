@@ -103,4 +103,30 @@ public class TeamService {
             throw new InformationNotFoundException("player with id " + playerId + " not found");
         }
     }
+
+    public Player updatePlayer(Long playerId, Player playerObject) {
+        Optional<Player> player = playerRepository.findById(playerId);
+
+        if(player.isPresent()){
+            if(playerObject.getName().equals(player.get().getName())){
+                throw new InformationExistException("no changes were made to " + player.get().getName());
+            } else {
+                Player updatePlayer = playerRepository.findById(playerId).get();
+                updatePlayer.setName(playerObject.getName());
+                updatePlayer.setCountry(playerObject.getCountry());
+                updatePlayer.setRating(playerObject.getRating());
+                updatePlayer.setPace(playerObject.getPace());
+                updatePlayer.setShowboating(playerObject.getShowboating());
+                updatePlayer.setPassing(playerObject.getPassing());
+                updatePlayer.setDribbling(playerObject.getDribbling());
+                updatePlayer.setDefense(playerObject.getDefense());
+                updatePlayer.setPhysicality(playerObject.getPhysicality());
+                updatePlayer.setPrimaryFoot(playerObject.getPrimaryFoot());
+                return playerRepository.save(updatePlayer);
+            }
+        } else {
+            throw new InformationNotFoundException("player with id " + playerId + " not found");
+        }
+    }
+
 }
