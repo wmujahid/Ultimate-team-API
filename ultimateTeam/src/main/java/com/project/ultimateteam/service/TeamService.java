@@ -6,7 +6,6 @@ import com.project.ultimateteam.model.Team;
 import com.project.ultimateteam.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -66,12 +65,12 @@ public class TeamService {
     }
 
     public Optional<Team> deleteTeam(Long teamId) {
+        System.out.println("service calling deleteCategory ==>");
+        Optional<Team> category = teamRepository.findById(teamId);
 
-        Optional team = teamRepository.findById(teamId);
-
-        if(team.isPresent()){
+        if (((Optional<?>) category).isPresent()) {
             teamRepository.deleteById(teamId);
-            return team;
+            return category;
         } else {
             throw new InformationNotFoundException("team with id " + teamId + " not found");
         }

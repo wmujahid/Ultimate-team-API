@@ -1,11 +1,9 @@
 package com.project.ultimateteam.controller;
 
-import com.project.ultimateteam.exception.InformationExistException;
-import com.project.ultimateteam.exception.InformationNotFoundException;
 import com.project.ultimateteam.model.Team;
-import com.project.ultimateteam.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.project.ultimateteam.service.TeamService;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,68 +12,41 @@ import java.util.Optional;
 @RequestMapping(path = "/api")
 public class TeamController {
 
-    private TeamRepository teamRepository;
+    private TeamService teamService;
+
+    @Autowired
+    public void setTeamService(TeamService teamService){
+        this.teamService = teamService;
+    }
 
     // Get all teams
-    @GetMapping(path = "/team/")
+    @GetMapping(path = "/team")
     public List<Team> getAllTeams() {
-        return teamRepository.findAll();
+        return teamService.getAllTeams();
     }
 
     // Get team by id
     @GetMapping(path = "/team/{teamId}")
-    public Optional getATeam(@PathVariable Long teamId) throws Exception {
-        Optional team = teamRepository.findById(teamId);
-        if(team.isPresent()){
-            return team;
-        } else {
-            throw new InformationNotFoundException("team with id " + teamId + " not found");
-        }
+    public Optional getATeam(@PathVariable Long teamId) {
+        return teamService.getATeam(teamId);
     }
 
     // Create a team and throw an exception if it
     @PostMapping("/team/")
     public Team createTeam(@RequestBody Team teamObject) {
         //  the @RequestBody annotation maps the HttpRequest body to an object
-
-        Team team = teamRepository.findByName(teamObject.getTeamName());
-
-        if(team != null){
-            throw new InformationExistException("team with name " + team.getTeamName() + " already exists");
-        } else {
-            return teamRepository.save(teamObject);
-        }
+        return teamService.createTeam(teamObject);
     }
 
     // Update team by id
     @PutMapping("/team/{teamId}")
     public Team updateTeam(@PathVariable(value = "teamId") Long teamId, @RequestBody Team teamObject) {
-        Optional<Team> team = teamRepository.findById(teamId);
-
-        if(team.isPresent()){
-            if(teamObject.getTeamName().equals(team.get().getTeamName())){
-                throw new InformationExistException("no changes were made to team " + team.get().getTeamName());
-            } else {
-                Team updateTeam = teamRepository.findById(teamId).get();
-                updateTeam.setTeamName(teamObject.getTeamName());
-                updateTeam.setDescription(teamObject.getDescription());
-                return teamRepository.save(updateTeam);
-            }
-        } else {
-            throw new InformationNotFoundException("team with id " + teamId + " not found");
-        }
+        return teamService.updateTeam(teamId, teamObject);
     }
 
     // Delete team by id
     @DeleteMapping("/team/{teamId}")
     public Optional<Team> deleteTeam(@PathVariable(value = "teamId") Long teamId) {
-
-        Optional team = teamRepository.findById(teamId);
-        if(team.isPresent()){
-            teamRepository.deleteById(teamId);
-            return team;
-        } else {
-            throw new InformationNotFoundException("team with id " + teamId + " not found");
-        }
+        return teamService.deleteTeam(teamId);
     }
 }

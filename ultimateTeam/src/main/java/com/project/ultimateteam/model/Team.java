@@ -12,14 +12,14 @@ public class Team {
     private Long id;
 
     @Column
-    private String teamName;
+    private String name;
 
     @Column
     private String description;
 
     public Team(Long id, String name, String description) {
         this.id = id;
-        this.teamName = name;
+        this.name = name;
         this.description = description;
     }
 
@@ -31,8 +31,8 @@ public class Team {
         this.id = id;
     }
 
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
+    public void setTeamName(String name) {
+        this.name = name;
     }
 
     public void setDescription(String description) {
@@ -44,10 +44,19 @@ public class Team {
     }
 
     public String getTeamName() {
-        return teamName;
+        return name;
     }
 
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
