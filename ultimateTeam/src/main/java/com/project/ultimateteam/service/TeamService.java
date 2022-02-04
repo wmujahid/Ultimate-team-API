@@ -2,6 +2,7 @@ package com.project.ultimateteam.service;
 
 import com.project.ultimateteam.exception.InformationExistException;
 import com.project.ultimateteam.exception.InformationNotFoundException;
+import com.project.ultimateteam.model.Coach;
 import com.project.ultimateteam.model.Player;
 import com.project.ultimateteam.model.Team;
 import com.project.ultimateteam.repository.PlayerRepository;
@@ -149,5 +150,20 @@ public class TeamService {
         } catch (NoSuchElementException e) {
             throw new InformationNotFoundException("player or team not found");
         }
+    }
+
+    public Coach createCoach(Long teamId, Coach coachObject) {
+    }
+
+    public List<Coach> getAllCoaches(Long teamId) {
+    }
+
+    public Coach getACoach(Long teamId, Long coachId) {
+    }
+
+    public Coach updateCoach(Long teamId, Long coachId, Coach coachObject) {
+    }
+
+    public void deleteCoach(Long teamId, Long coachId) {
     }
 }

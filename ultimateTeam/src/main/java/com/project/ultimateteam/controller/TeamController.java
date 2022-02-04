@@ -1,5 +1,6 @@
 package com.project.ultimateteam.controller;
 
+import com.project.ultimateteam.model.Coach;
 import com.project.ultimateteam.model.Player;
 import com.project.ultimateteam.model.Team;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,8 @@ public class TeamController {
         return teamService.deleteTeam(teamId);
     }
 
+    //----------------------------------------------------------------------------------------------------//
+
     @PostMapping("/teams/{teamId}/players")
     public Player createPlayer(
             @PathVariable(value = "teamId") Long teamId, @RequestBody Player playerObject) {
@@ -81,8 +84,42 @@ public class TeamController {
     public ResponseEntity<HashMap> deletePlayer(@PathVariable(value = "teamId") Long teamId,
                                                 @PathVariable(value = "playerId") Long playerId) {
         teamService.deletePlayer(teamId, playerId);
-        HashMap resposeMessage = new HashMap();
-        resposeMessage.put("status", "player with id: " + playerId + " was successfully deleted.");
-        return new ResponseEntity<HashMap>(resposeMessage, HttpStatus.OK);
+        HashMap responseMessage = new HashMap();
+        responseMessage.put("status", "player with id: " + playerId + " was successfully deleted.");
+        return new ResponseEntity<HashMap>(responseMessage, HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------//
+
+    @PostMapping("/teams/{teamId}/coaches")
+    public Coach createCoach(
+            @PathVariable(value = "teamId") Long teamId, @RequestBody Coach coachObject) {
+        return teamService.createCoach(teamId, coachObject);
+    }
+
+    @GetMapping(path = "/teams/{teamId}/coaches")
+    public List<Coach> getAllCoaches(@PathVariable(value = "teamId") Long teamId) {
+        return teamService.getAllCoaches(teamId);
+    }
+
+    @GetMapping(path = "/teams/{teamId}/coaches/{coachId}")
+    public Coach getACoach(@PathVariable(value = "teamId") Long teamId, @PathVariable(value = "coachId") Long coachId) {
+        return teamService.getACoach(teamId, coachId);
+    }
+
+    @PutMapping("/teams/{teamId}/coaches/{coachId}")
+    public Coach updateCoach(@PathVariable(value = "teamId" ) Long teamId,
+                               @PathVariable(value = "coachId") Long coachId,
+                               @RequestBody Coach coachObject) {
+        return teamService.updateCoach(teamId, coachId, coachObject);
+    }
+
+    @DeleteMapping("/teams/{teamId}/coaches/{coachId}")
+    public ResponseEntity<HashMap> deleteCoach(@PathVariable(value = "teamId") Long teamId,
+                                                @PathVariable(value = "coachId") Long coachId) {
+        teamService.deleteCoach(teamId, coachId);
+        HashMap responseMessage = new HashMap();
+        responseMessage.put("status", "coach with id: " + coachId + " was successfully deleted.");
+        return new ResponseEntity<HashMap>(responseMessage, HttpStatus.OK);
     }
 }
