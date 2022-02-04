@@ -27,7 +27,7 @@ public class Stadium {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    public Stadium(Long id, String name, String city, Integer seatingCapacity, boolean hasChant) {
+    public Stadium(Long id, String name, String city, Integer seatingCapacity) {
         this.id = id;
         this.name = name;
         this.city = city;
