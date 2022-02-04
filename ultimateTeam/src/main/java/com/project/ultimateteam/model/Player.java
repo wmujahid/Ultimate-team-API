@@ -152,4 +152,22 @@ public class Player {
     public void setPrimaryFoot(String primaryFoot) {
         this.primaryFoot = primaryFoot;
     }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", country='" + country + '\'' +
+                ", rating=" + rating +
+                ", pace=" + pace +
+                ", showboating=" + showboating +
+                ", passing=" + passing +
+                ", dribbling=" + dribbling +
+                ", defense=" + defense +
+                ", physicality=" + physicality +
+                ", primaryFoot='" + primaryFoot + '\'' +
+                ", team=" + team +
+                '}';
+    }
 }
