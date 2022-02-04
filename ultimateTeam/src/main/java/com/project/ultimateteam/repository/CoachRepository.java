@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface CoachRepository extends JpaRepository<Coach, Long> {
 
-
     List<Coach> findByTeamId(Long teamId);
 }
