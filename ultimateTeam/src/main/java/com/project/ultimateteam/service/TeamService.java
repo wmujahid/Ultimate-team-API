@@ -221,7 +221,7 @@ public class TeamService {
                     teamId).stream().filter(p -> p.getId().equals(coachId)).findFirst()).get();
             coachRepository.deleteById(coach.getId());
         } catch (NoSuchElementException e) {
-            throw new InformationNotFoundException("player or team not found");
+            throw new InformationNotFoundException("coach or team not found");
         }
     }
 
@@ -273,5 +273,12 @@ public class TeamService {
     }
 
     public void deleteStadium(Long teamId, Long stadiumId) {
+        try {
+            Stadium stadium = (stadiumRepository.findByTeamId(
+                    teamId).stream().filter(p -> p.getId().equals(stadiumId)).findFirst()).get();
+            stadiumRepository.deleteById(stadium.getId());
+        } catch (NoSuchElementException e) {
+            throw new InformationNotFoundException("stadium or team not found");
+        }
     }
 }
