@@ -3,9 +3,12 @@ package com.project.ultimateteam.controller;
 import com.project.ultimateteam.model.Player;
 import com.project.ultimateteam.model.Team;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.project.ultimateteam.service.TeamService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,33 +50,39 @@ public class TeamController {
 
     // Delete team by id
     @DeleteMapping("/teams/{teamId}")
-    public String deleteTeam(@PathVariable(value = "teamId") Long teamId) {
+    public Optional<Team> deleteTeam(@PathVariable(value = "teamId") Long teamId) {
         return teamService.deleteTeam(teamId);
     }
 
     @PostMapping("/teams/{teamId}/players")
-    public Player createPlayer(@RequestBody Player playerObject) {
-        //  the @RequestBody annotation maps the HttpRequest body to an object
-        return teamService.createPlayer(playerObject);
+    public Player createPlayer(
+            @PathVariable(value = "teamId") Long teamId, @RequestBody Player playerObject) {
+            return teamService.createPlayer(teamId, playerObject);
     }
 
     @GetMapping(path = "/teams/{teamId}/players")
-    public List<Player> getAllPlayers() {
-        return teamService.getAllPlayers();
+    public List<Player> getAllPlayers(@PathVariable(value = "teamId") Long teamId) {
+        return teamService.getAllPlayers(teamId);
     }
 
     @GetMapping(path = "/teams/{teamId}/players/{playerId}")
-    public Optional getAPlayer(@PathVariable Long playerId) {
-        return teamService.getAPlayer(playerId);
+    public Player getAPlayer(@PathVariable(value = "teamId") Long teamId, @PathVariable(value = "playerId") Long playerId) {
+        return teamService.getAPlayer(teamId, playerId);
     }
 
     @PutMapping("/teams/{teamId}/players/{playerId}")
-    public Player updatePlayer(@PathVariable(value = "playerId") Long playerId, @RequestBody Player playerObject) {
-        return teamService.updatePlayer(playerId, playerObject);
+    public Player updatePlayer(@PathVariable(value = "teamId" ) Long teamId,
+                               @PathVariable(value = "playerId") Long playerId,
+                               @RequestBody Player playerObject) {
+        return teamService.updatePlayer(teamId, playerId, playerObject);
     }
 
     @DeleteMapping("/teams/{teamId}/players/{playerId}")
-    public String deletePlayer(@PathVariable(value = "playerId") Long playerId) {
-        return teamService.deletePlayer(playerId);
+    public ResponseEntity<HashMap> deletePlayer(@PathVariable(value = "teamId") Long teamId,
+                                                @PathVariable(value = "playerId") Long playerId) {
+        teamService.deletePlayer(teamId, playerId);
+        HashMap resposeMessage = new HashMap();
+        resposeMessage.put("status", "player with id: " + playerId + " was successfully deleted.");
+        return new ResponseEntity<HashMap>(resposeMessage, HttpStatus.OK);
     }
 }

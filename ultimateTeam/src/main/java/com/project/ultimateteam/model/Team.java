@@ -59,6 +59,12 @@ public class Team {
     public void setDescription(String description) {
         this.description = description;
     }
+    public List<Player> getPlayerList() {
+        return getPlayerList();
+    }
+    public void setPlayerList(List<Player> playerList){
+        this.playerList = playerList;
+    }
 
     @Override
     public String toString() {
@@ -68,11 +74,6 @@ public class Team {
                 ", description='" + description + '\'' +
                 '}';
     }
-    public List<Player> getPlayerList() {
-        return getPlayerList();
-    }
-    public void setPlayerList(List<Player> playerList){
-        this.playerList = playerList;
-    }
+
 
 }

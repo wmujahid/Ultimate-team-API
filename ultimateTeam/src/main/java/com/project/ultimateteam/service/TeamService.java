@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -21,6 +22,11 @@ public class TeamService {
     @Autowired
     public void setTeamRepository(TeamRepository teamRepository){
         this.teamRepository = teamRepository;
+    }
+
+    @Autowired
+    public void setPlayerRepository(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
     }
 
     public List<Team> getAllTeams() {
@@ -67,76 +73,81 @@ public class TeamService {
         }
     }
 
-    public String deleteTeam(Long teamId) {
+    public Optional<Team> deleteTeam(Long teamId) {
 
         Optional<Team> team = teamRepository.findById(teamId);
 
-        if (team != null) {
+        if (team.isPresent()) {
             teamRepository.deleteById(teamId);
-            return "team with id " + teamId + " has been successfully deleted";
+            return team;
         } else {
             throw new InformationNotFoundException("team with id " + teamId + " not found");
         }
     }
 
-    public Player createPlayer(Player playerObject){
-        Player player = playerRepository.findByName(playerObject.getName());
-
-        if(player != null){
-            throw new InformationExistException("team with name " + player.getName() + " already exists");
-        } else {
+    public Player createPlayer(Long teamId, Player playerObject){
+        try{
+            Optional team = teamRepository.findById(teamId);
+            playerObject.setTeam((Team) team.get());
             return playerRepository.save(playerObject);
+        } catch (NoSuchElementException e){
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
         }
+
     }
 
-    public List<Player> getAllPlayers() {
-        return playerRepository.findAll();
-    }
-
-    public Optional getAPlayer(Long playerId) {
-
-        Optional player = playerRepository.findById(playerId);
-
-        if(player.isPresent()){
-            return player;
+    public List<Player> getAllPlayers(Long teamId) {
+        Optional<Team> team = teamRepository.findById(teamId);
+        if (team.isPresent()) {
+            return team.get().getPlayerList();
         } else {
-            throw new InformationNotFoundException("player with id " + playerId + " not found");
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
         }
     }
 
-    public Player updatePlayer(Long playerId, Player playerObject) {
-        Optional<Player> player = playerRepository.findById(playerId);
+    public Player getAPlayer(Long teamId, Long playerId) {
 
-        if(player.isPresent()){
-            if(playerObject.getName().equals(player.get().getName())){
-                throw new InformationExistException("no changes were made to " + player.get().getName());
+        Optional<Team> team = teamRepository.findById(teamId);
+        if (team.isPresent()) {
+            Optional<Player> player = playerRepository.findByTeamId(teamId).stream().filter(
+                    p -> p.getId().equals(playerId)).findFirst();
+            if (player.isEmpty()) {
+                throw new InformationNotFoundException("player with id " + playerId + " not found");
             } else {
-                Player updatePlayer = playerRepository.findById(playerId).get();
-                updatePlayer.setName(playerObject.getName());
-                updatePlayer.setCountry(playerObject.getCountry());
-                updatePlayer.setRating(playerObject.getRating());
-                updatePlayer.setPace(playerObject.getPace());
-                updatePlayer.setShowboating(playerObject.getShowboating());
-                updatePlayer.setPassing(playerObject.getPassing());
-                updatePlayer.setDribbling(playerObject.getDribbling());
-                updatePlayer.setDefense(playerObject.getDefense());
-                updatePlayer.setPhysicality(playerObject.getPhysicality());
-                updatePlayer.setPrimaryFoot(playerObject.getPrimaryFoot());
-                return playerRepository.save(updatePlayer);
+                return player.get();
             }
         } else {
-            throw new InformationNotFoundException("player with id " + playerId + " not found");
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
         }
     }
 
-    public String deletePlayer(Long playerId) {
-        Optional<Player> player = playerRepository.findById(playerId);
+    public Player updatePlayer(Long teamId, Long playerId, Player playerObject) {
+        try {
+            Player player = (playerRepository.findByTeamId(
+                    teamId).stream().filter(p -> p.getId().equals(playerId)).findFirst()).get();
+            player.setName(playerObject.getName());
+            player.setCountry(playerObject.getCountry());
+            player.setRating(playerObject.getRating());
+            player.setPace(playerObject.getPace());
+            player.setShowboating(playerObject.getShowboating());
+            player.setPassing(playerObject.getPassing());
+            player.setDribbling(playerObject.getDribbling());
+            player.setDefense(playerObject.getDefense());
+            player.setPhysicality(playerObject.getPhysicality());
+            player.setPrimaryFoot(playerObject.getPrimaryFoot());
+            return playerRepository.save(player);
+        } catch (NoSuchElementException e) {
+            throw new InformationNotFoundException("player or team not found");
+        }
+    }
 
-        if (player != null) {
-            playerRepository.deleteById(playerId);
-            return "player with id " + playerId + " has been successfully deleted";
-        } else {
-            throw new InformationNotFoundException("player with id " + playerId + " not found");
+    public void deletePlayer(Long teamId, Long playerId) {
+        try {
+            Player player = (playerRepository.findByTeamId(
+                    teamId).stream().filter(p -> p.getId().equals(playerId)).findFirst()).get();
+            playerRepository.deleteById(player.getId());
+        } catch (NoSuchElementException e) {
+            throw new InformationNotFoundException("player or team not found");
         }
     }
 }
