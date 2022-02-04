@@ -3,7 +3,7 @@
 ## General Approach: 
 
 ## My Entity Relationship Diagram (ERD):
-![](./Ultimate Team.png)
+![](./UltimateTeam.png)
 
 ## User Stories
 - As a user, I should be able to start a new tic tac toe game
