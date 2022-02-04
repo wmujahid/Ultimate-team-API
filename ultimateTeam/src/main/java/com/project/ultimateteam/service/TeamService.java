@@ -127,7 +127,6 @@ public class TeamService {
         } else {
             throw new InformationNotFoundException("player with id " + playerId + " not found");
         }
-
     }
 
     public String deletePlayer(Long playerId) {

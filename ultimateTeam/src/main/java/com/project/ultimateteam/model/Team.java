@@ -1,6 +1,10 @@
 package com.project.ultimateteam.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name= "teams")
@@ -16,6 +20,11 @@ public class Team {
 
     @Column
     private String description;
+
+    // one category can contain more than one player
+    @OneToMany(mappedBy = "team", orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Player> playerList;
 
     public Team(Long id, String name, String description) {
         this.id = id;
@@ -59,4 +68,11 @@ public class Team {
                 ", description='" + description + '\'' +
                 '}';
     }
+    public List<Player> getPlayerList() {
+        return getPlayerList();
+    }
+    public void setPlayerList(List<Player> playerList){
+        this.playerList = playerList;
+    }
+
 }
