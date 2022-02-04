@@ -5,6 +5,7 @@ import com.project.ultimateteam.exception.InformationNotFoundException;
 import com.project.ultimateteam.model.Coach;
 import com.project.ultimateteam.model.Player;
 import com.project.ultimateteam.model.Team;
+import com.project.ultimateteam.repository.CoachRepository;
 import com.project.ultimateteam.repository.PlayerRepository;
 import com.project.ultimateteam.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class TeamService {
 
     private TeamRepository teamRepository;
     private PlayerRepository playerRepository;
+    private CoachRepository coachRepository;
 
     @Autowired
     public void setTeamRepository(TeamRepository teamRepository){
@@ -28,6 +30,11 @@ public class TeamService {
     @Autowired
     public void setPlayerRepository(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
+    }
+
+    @Autowired
+    public void setCoachRepository(CoachRepository coachRepository) {
+        this.coachRepository = coachRepository;
     }
 
     public List<Team> getAllTeams() {
@@ -153,6 +160,13 @@ public class TeamService {
     }
 
     public Coach createCoach(Long teamId, Coach coachObject) {
+        try{
+            Optional team = teamRepository.findById(teamId);
+            coachObject.setTeam((Team) team.get());
+            return coachRepository.save(coachObject);
+        } catch (NoSuchElementException e){
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
+        }
     }
 
     public List<Coach> getAllCoaches(Long teamId) {

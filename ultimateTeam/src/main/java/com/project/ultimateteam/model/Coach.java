@@ -91,4 +91,7 @@ public class Coach {
                 ", strategy='" + strategy + '\'' +
                 '}';
     }
+
+    public void setTeam(Team team) {
+    }
 }
