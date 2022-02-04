@@ -2,7 +2,9 @@ package com.project.ultimateteam.service;
 
 import com.project.ultimateteam.exception.InformationExistException;
 import com.project.ultimateteam.exception.InformationNotFoundException;
+import com.project.ultimateteam.model.Player;
 import com.project.ultimateteam.model.Team;
+import com.project.ultimateteam.repository.PlayerRepository;
 import com.project.ultimateteam.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class TeamService {
 
     private TeamRepository teamRepository;
+    private PlayerRepository playerRepository;
 
     @Autowired
     public void setTeamRepository(TeamRepository teamRepository){
@@ -73,6 +76,31 @@ public class TeamService {
             return "team with id " + teamId + " has been successfully deleted";
         } else {
             throw new InformationNotFoundException("team with id " + teamId + " not found");
+        }
+    }
+
+    public Player createPlayer(Player playerObject){
+        Player player = playerRepository.findByName(playerObject.getName());
+
+        if(player != null){
+            throw new InformationExistException("team with name " + player.getName() + " already exists");
+        } else {
+            return playerRepository.save(playerObject);
+        }
+    }
+
+    public List<Player> getAllPlayers() {
+        return playerRepository.findAll();
+    }
+
+    public Optional getAPlayer(Long playerId) {
+
+        Optional player = playerRepository.findById(playerId);
+
+        if(player.isPresent()){
+            return player;
+        } else {
+            throw new InformationNotFoundException("player with id " + playerId + " not found");
         }
     }
 }
