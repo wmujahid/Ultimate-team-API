@@ -133,7 +133,7 @@ public class TeamController {
     }
 
     @GetMapping(path = "/teams/{teamId}/stadiums")
-    public Coach getAllStadiums(@PathVariable(value = "teamId") Long teamId) {
+    public Stadium getAllStadiums(@PathVariable(value = "teamId") Long teamId) {
         return teamService.getAllStadiums(teamId);
     }
 

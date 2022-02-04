@@ -22,9 +22,6 @@ public class Stadium {
     @Column
     private Integer seatingCapacity;
 
-    @Column
-    private boolean hasChant;
-
     @JsonIgnore
     @OneToOne
     @JoinColumn(name = "team_id")
@@ -35,7 +32,6 @@ public class Stadium {
         this.name = name;
         this.city = city;
         this.seatingCapacity = seatingCapacity;
-        this.hasChant = hasChant;
     }
 
     public Stadium() {
@@ -74,13 +70,6 @@ public class Stadium {
         this.seatingCapacity = seatingCapacity;
     }
 
-    public boolean isHasChant() {
-        return hasChant;
-    }
-
-    public void setHasChant(boolean hasChant) {
-        this.hasChant = hasChant;
-    }
 
     @Override
     public String toString() {
@@ -89,7 +78,7 @@ public class Stadium {
                 ", name='" + name + '\'' +
                 ", city='" + city + '\'' +
                 ", seatingCapacity=" + seatingCapacity +
-                ", hasChant=" + hasChant +
+                ", team=" + team +
                 '}';
     }
 

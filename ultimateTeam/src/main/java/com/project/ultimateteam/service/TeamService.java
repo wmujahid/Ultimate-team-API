@@ -245,9 +245,31 @@ public class TeamService {
     }
 
     public Stadium getAStadium(Long teamId, Long stadiumId) {
+        Optional<Team> team = teamRepository.findById(teamId);
+        if (team.isPresent()) {
+            Optional<Stadium> stadium = stadiumRepository.findByTeamId(teamId).stream().filter(
+                    p -> p.getId().equals(stadiumId)).findFirst();
+            if (stadium.isEmpty()) {
+                throw new InformationNotFoundException("stadium with id " + stadiumId + " not found");
+            } else {
+                return stadium.get();
+            }
+        } else {
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
+        }
     }
 
     public Stadium updateStadium(Long teamId, Long stadiumId, Stadium stadiumObject) {
+        try {
+            Stadium stadium = (stadiumRepository.findByTeamId(
+                    teamId).stream().filter(p -> p.getId().equals(stadiumId)).findFirst()).get();
+            stadium.setName(stadiumObject.getName());
+            stadium.setCity(stadiumObject.getCity());
+            stadium.setSeatingCapacity(stadiumObject.getSeatingCapacity());
+            return stadiumRepository.save(stadium);
+        } catch (NoSuchElementException e) {
+            throw new InformationNotFoundException("stadium or team not found");
+        }
     }
 
     public void deleteStadium(Long teamId, Long stadiumId) {
