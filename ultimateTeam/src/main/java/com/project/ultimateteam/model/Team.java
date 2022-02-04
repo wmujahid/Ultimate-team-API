@@ -30,6 +30,10 @@ public class Team {
     @LazyCollection(LazyCollectionOption.FALSE)
     private Coach coach;
 
+    @OneToOne(mappedBy = "team", orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Stadium stadium;
+
 
     public Team(Long id, String name, String description) {
         this.id = id;
@@ -74,6 +78,10 @@ public class Team {
     public Coach getCoach() { return coach; }
     public void setCoach(Coach coach){
         this.coach = coach;
+    }
+    public Stadium getStadium() { return stadium; }
+    public void setStadium(Stadium stadium){
+        this.stadium = stadium;
     }
 
     @Override

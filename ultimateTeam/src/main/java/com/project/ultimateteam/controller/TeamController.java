@@ -2,6 +2,7 @@ package com.project.ultimateteam.controller;
 
 import com.project.ultimateteam.model.Coach;
 import com.project.ultimateteam.model.Player;
+import com.project.ultimateteam.model.Stadium;
 import com.project.ultimateteam.model.Team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -120,6 +121,40 @@ public class TeamController {
         teamService.deleteCoach(teamId, coachId);
         HashMap responseMessage = new HashMap();
         responseMessage.put("status", "coach with id: " + coachId + " was successfully deleted.");
+        return new ResponseEntity<HashMap>(responseMessage, HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------//
+
+    @PostMapping("/teams/{teamId}/stadiums")
+    public Stadium createStadium(
+            @PathVariable(value = "teamId") Long teamId, @RequestBody Stadium stadiumObject) {
+        return teamService.createStadium(teamId, stadiumObject);
+    }
+
+    @GetMapping(path = "/teams/{teamId}/stadiums")
+    public Coach getAllStadiums(@PathVariable(value = "teamId") Long teamId) {
+        return teamService.getAllStadiums(teamId);
+    }
+
+    @GetMapping(path = "/teams/{teamId}/stadiums/{stadiumId}")
+    public Stadium getAStadium(@PathVariable(value = "teamId") Long teamId, @PathVariable(value = "stadiumId") Long stadiumId) {
+        return teamService.getAStadium(teamId, stadiumId);
+    }
+
+    @PutMapping("/teams/{teamId}/stadiums/{stadiumId}")
+    public Stadium updateStadium(@PathVariable(value = "teamId" ) Long teamId,
+                             @PathVariable(value = "stadiumId") Long stadiumId,
+                             @RequestBody Stadium stadiumObject) {
+        return teamService.updateStadium(teamId, stadiumId, stadiumObject);
+    }
+
+    @DeleteMapping("/teams/{teamId}/stadiums/{stadiumId}")
+    public ResponseEntity<HashMap> deleteStadium(@PathVariable(value = "teamId") Long teamId,
+                                               @PathVariable(value = "stadiumId") Long stadiumId) {
+        teamService.deleteStadium(teamId, stadiumId);
+        HashMap responseMessage = new HashMap();
+        responseMessage.put("status", "stadium with id: " + stadiumId + " was successfully deleted.");
         return new ResponseEntity<HashMap>(responseMessage, HttpStatus.OK);
     }
 }

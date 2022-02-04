@@ -4,9 +4,11 @@ import com.project.ultimateteam.exception.InformationExistException;
 import com.project.ultimateteam.exception.InformationNotFoundException;
 import com.project.ultimateteam.model.Coach;
 import com.project.ultimateteam.model.Player;
+import com.project.ultimateteam.model.Stadium;
 import com.project.ultimateteam.model.Team;
 import com.project.ultimateteam.repository.CoachRepository;
 import com.project.ultimateteam.repository.PlayerRepository;
+import com.project.ultimateteam.repository.StadiumRepository;
 import com.project.ultimateteam.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class TeamService {
     private TeamRepository teamRepository;
     private PlayerRepository playerRepository;
     private CoachRepository coachRepository;
+    private StadiumRepository stadiumRepository;
 
     @Autowired
     public void setTeamRepository(TeamRepository teamRepository){
@@ -35,6 +38,11 @@ public class TeamService {
     @Autowired
     public void setCoachRepository(CoachRepository coachRepository) {
         this.coachRepository = coachRepository;
+    }
+
+    @Autowired
+    public void setStadiumRepository(StadiumRepository stadiumRepository) {
+        this.stadiumRepository = stadiumRepository;
     }
 
     public List<Team> getAllTeams() {
@@ -215,5 +223,33 @@ public class TeamService {
         } catch (NoSuchElementException e) {
             throw new InformationNotFoundException("player or team not found");
         }
+    }
+
+    public Stadium createStadium(Long teamId, Stadium stadiumObject) {
+        try{
+            Optional team = teamRepository.findById(teamId);
+            stadiumObject.setTeam((Team) team.get());
+            return stadiumRepository.save(stadiumObject);
+        } catch (NoSuchElementException e){
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
+        }
+    }
+
+    public Stadium getAllStadiums(Long teamId) {
+        Optional<Team> team = teamRepository.findById(teamId);
+        if (team.isPresent()) {
+            return team.get().getStadium();
+        } else {
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
+        }
+    }
+
+    public Stadium getAStadium(Long teamId, Long stadiumId) {
+    }
+
+    public Stadium updateStadium(Long teamId, Long stadiumId, Stadium stadiumObject) {
+    }
+
+    public void deleteStadium(Long teamId, Long stadiumId) {
     }
 }

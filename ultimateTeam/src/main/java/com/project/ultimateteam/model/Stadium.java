@@ -1,5 +1,7 @@
 package com.project.ultimateteam.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -23,6 +25,11 @@ public class Stadium {
     @Column
     private boolean hasChant;
 
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
+
     public Stadium(Long id, String name, String city, Integer seatingCapacity, boolean hasChant) {
         this.id = id;
         this.name = name;
@@ -33,6 +40,7 @@ public class Stadium {
 
     public Stadium() {
     }
+
 
     public Long getId() {
         return id;
@@ -83,5 +91,13 @@ public class Stadium {
                 ", seatingCapacity=" + seatingCapacity +
                 ", hasChant=" + hasChant +
                 '}';
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }
