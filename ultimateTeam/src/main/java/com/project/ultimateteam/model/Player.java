@@ -3,6 +3,9 @@ package com.project.ultimateteam.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "players")
@@ -16,30 +19,53 @@ public class Player {
     private String name;
 
     @Column
+    @NotNull
     private String country;
 
     @Column
+    @NotNull
+    @Min(1)
+    @Max(100)
     private Integer rating;
 
     @Column
+    @NotNull
+    @Min(1)
+    @Max(100)
     private Integer pace;
 
     @Column
+    @NotNull
+    @Min(1)
+    @Max(100)
     private Integer showboating;
 
     @Column
+    @NotNull
+    @Min(1)
+    @Max(100)
     private Integer passing;
 
     @Column
+    @NotNull
+    @Min(1)
+    @Max(100)
     private Integer dribbling;
 
     @Column
+    @NotNull
+    @Min(1)
+    @Max(100)
     private Integer defense;
 
     @Column
+    @NotNull
+    @Min(1)
+    @Max(100)
     private Integer physicality;
 
     @Column
+    @NotNull
     private String primaryFoot;
 
     @JsonIgnore
