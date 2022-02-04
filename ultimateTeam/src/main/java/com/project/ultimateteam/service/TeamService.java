@@ -37,10 +37,10 @@ public class TeamService {
 
     public Team createTeam(Team teamObject) {
 
-        Team team = teamRepository.findByName(teamObject.getTeamName());
+        Team team = teamRepository.findByName(teamObject.getName());
 
         if(team != null){
-            throw new InformationExistException("team with name " + team.getTeamName() + " already exists");
+            throw new InformationExistException("team with name " + team.getName() + " already exists");
         } else {
             return teamRepository.save(teamObject);
         }
@@ -51,11 +51,11 @@ public class TeamService {
         Optional<Team> team = teamRepository.findById(teamId);
 
         if(team.isPresent()){
-            if(teamObject.getTeamName().equals(team.get().getTeamName())){
-                throw new InformationExistException("no changes were made to team " + team.get().getTeamName());
+            if(teamObject.getName().equals(team.get().getName())){
+                throw new InformationExistException("no changes were made to team " + team.get().getName());
             } else {
                 Team updateTeam = teamRepository.findById(teamId).get();
-                updateTeam.setTeamName(teamObject.getTeamName());
+                updateTeam.setName(teamObject.getName());
                 updateTeam.setDescription(teamObject.getDescription());
                 return teamRepository.save(updateTeam);
             }

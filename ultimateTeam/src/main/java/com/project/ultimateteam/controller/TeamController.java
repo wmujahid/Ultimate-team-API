@@ -32,7 +32,7 @@ public class TeamController {
     }
 
     // Create a team and throw an exception if it
-    @PostMapping("/team/")
+    @PostMapping("/team")
     public Team createTeam(@RequestBody Team teamObject) {
         //  the @RequestBody annotation maps the HttpRequest body to an object
         return teamService.createTeam(teamObject);
