@@ -59,8 +59,9 @@ public class Team {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public List<Player> getPlayerList() {
-        return getPlayerList();
+        return playerList;
     }
     public void setPlayerList(List<Player> playerList){
         this.playerList = playerList;
