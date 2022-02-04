@@ -98,7 +98,7 @@ public class TeamController {
     }
 
     @GetMapping(path = "/teams/{teamId}/coaches")
-    public List<Coach> getAllCoaches(@PathVariable(value = "teamId") Long teamId) {
+    public Coach getAllCoaches(@PathVariable(value = "teamId") Long teamId) {
         return teamService.getAllCoaches(teamId);
     }
 

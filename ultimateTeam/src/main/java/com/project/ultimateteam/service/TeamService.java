@@ -169,10 +169,10 @@ public class TeamService {
         }
     }
 
-    public List<Coach> getAllCoaches(Long teamId) {
+    public Coach getAllCoaches(Long teamId) {
         Optional<Team> team = teamRepository.findById(teamId);
         if (team.isPresent()) {
-            return team.get().getCoachList();
+            return team.get().getCoach();
         } else {
             throw new InformationNotFoundException("team with id " + teamId + " not found");
         }

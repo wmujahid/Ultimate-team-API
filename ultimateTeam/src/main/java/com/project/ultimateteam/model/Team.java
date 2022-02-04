@@ -28,7 +28,7 @@ public class Team {
 
     @OneToOne(mappedBy = "team", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Coach> coachList;
+    private Coach coach;
 
 
     public Team(Long id, String name, String description) {
@@ -71,9 +71,9 @@ public class Team {
     public void setPlayerList(List<Player> playerList){
         this.playerList = playerList;
     }
-    public List<Coach> getCoachList() { return coachList; }
-    public void setCoachList(List<Coach> coachList){
-        this.coachList = coachList;
+    public Coach getCoach() { return coach; }
+    public void setCoach(Coach coach){
+        this.coach = coach;
     }
 
     @Override
