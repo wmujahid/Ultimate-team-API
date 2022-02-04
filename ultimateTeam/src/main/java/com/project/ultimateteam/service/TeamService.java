@@ -127,6 +127,17 @@ public class TeamService {
         } else {
             throw new InformationNotFoundException("player with id " + playerId + " not found");
         }
+
     }
 
+    public String deletePlayer(Long playerId) {
+        Optional<Player> player = playerRepository.findById(playerId);
+
+        if (player != null) {
+            playerRepository.deleteById(playerId);
+            return "player with id " + playerId + " has been successfully deleted";
+        } else {
+            throw new InformationNotFoundException("player with id " + playerId + " not found");
+        }
+    }
 }
