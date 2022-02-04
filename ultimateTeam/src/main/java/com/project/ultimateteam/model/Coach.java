@@ -1,5 +1,7 @@
 package com.project.ultimateteam.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -22,6 +24,11 @@ public class Coach {
 
     @Column
     private String strategy;
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     public Coach(Long id, String name, String nationality, Integer age, String strategy) {
         this.id = id;
