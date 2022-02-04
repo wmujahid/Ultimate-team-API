@@ -26,6 +26,11 @@ public class Team {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Player> playerList;
 
+    @OneToOne(mappedBy = "team", orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Coach> coachList;
+
+
     public Team(Long id, String name, String description) {
         this.id = id;
         this.name = name;
@@ -66,6 +71,10 @@ public class Team {
     public void setPlayerList(List<Player> playerList){
         this.playerList = playerList;
     }
+    public List<Coach> getCoachList() { return coachList; }
+    public void setCoachList(List<Coach> coachList){
+        this.coachList = coachList;
+    }
 
     @Override
     public String toString() {
@@ -75,6 +84,7 @@ public class Team {
                 ", description='" + description + '\'' +
                 '}';
     }
+
 
 
 }

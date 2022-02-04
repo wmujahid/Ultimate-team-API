@@ -170,14 +170,50 @@ public class TeamService {
     }
 
     public List<Coach> getAllCoaches(Long teamId) {
+        Optional<Team> team = teamRepository.findById(teamId);
+        if (team.isPresent()) {
+            return team.get().getCoachList();
+        } else {
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
+        }
     }
 
     public Coach getACoach(Long teamId, Long coachId) {
+        Optional<Team> team = teamRepository.findById(teamId);
+        if (team.isPresent()) {
+            Optional<Coach> coach = coachRepository.findByTeamId(teamId).stream().filter(
+                    p -> p.getId().equals(coachId)).findFirst();
+            if (coach.isEmpty()) {
+                throw new InformationNotFoundException("coach with id " + coachId + " not found");
+            } else {
+                return coach.get();
+            }
+        } else {
+            throw new InformationNotFoundException("team with id " + teamId + " not found");
+        }
     }
 
     public Coach updateCoach(Long teamId, Long coachId, Coach coachObject) {
+        try {
+            Coach coach = (coachRepository.findByTeamId(
+                    teamId).stream().filter(p -> p.getId().equals(coachId)).findFirst()).get();
+            coach.setName(coachObject.getName());
+            coach.setNationality(coachObject.getNationality());
+            coach.setAge(coachObject.getAge());
+            coach.setStrategy(coachObject.getStrategy());
+            return coachRepository.save(coach);
+        } catch (NoSuchElementException e) {
+            throw new InformationNotFoundException("coach or team not found");
+        }
     }
 
     public void deleteCoach(Long teamId, Long coachId) {
+        try {
+            Coach coach = (coachRepository.findByTeamId(
+                    teamId).stream().filter(p -> p.getId().equals(coachId)).findFirst()).get();
+            coachRepository.deleteById(coach.getId());
+        } catch (NoSuchElementException e) {
+            throw new InformationNotFoundException("player or team not found");
+        }
     }
 }
