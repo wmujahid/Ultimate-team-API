@@ -64,13 +64,13 @@ public class TeamService {
         }
     }
 
-    public Optional<Team> deleteTeam(Long teamId) {
-        System.out.println("service calling deleteCategory ==>");
-        Optional<Team> category = teamRepository.findById(teamId);
+    public String deleteTeam(Long teamId) {
 
-        if (((Optional<?>) category).isPresent()) {
+        Optional<Team> team = teamRepository.findById(teamId);
+
+        if (team != null) {
             teamRepository.deleteById(teamId);
-            return category;
+            return "team with id " + teamId + " has been successfully deleted";
         } else {
             throw new InformationNotFoundException("team with id " + teamId + " not found");
         }

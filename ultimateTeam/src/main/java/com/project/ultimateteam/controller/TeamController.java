@@ -46,7 +46,7 @@ public class TeamController {
 
     // Delete team by id
     @DeleteMapping("/team/{teamId}")
-    public Optional<Team> deleteTeam(@PathVariable(value = "teamId") Long teamId) {
+    public String deleteTeam(@PathVariable(value = "teamId") Long teamId) {
         return teamService.deleteTeam(teamId);
     }
 }
