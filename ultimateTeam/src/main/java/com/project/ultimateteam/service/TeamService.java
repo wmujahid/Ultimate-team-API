@@ -234,11 +234,19 @@ public class TeamService {
     }
 
     public Stadium createStadium(Long teamId, Stadium stadiumObject) {
-        try{
-            Optional team = teamRepository.findById(teamId);
-            stadiumObject.setTeam((Team) team.get());
-            return stadiumRepository.save(stadiumObject);
-        } catch (NoSuchElementException e){
+        try {
+            Optional<Team> team = teamRepository.findById(teamId);
+            if (team.isPresent()) {
+                if (team.get().getStadium() != null) {
+                    throw new InformationExistException("a stadium for the team with id " + teamId + " already exists");
+                } else {
+                    stadiumObject.setTeam(team.get());
+                    return stadiumRepository.save(stadiumObject);
+                }
+            } else {
+                throw new InformationNotFoundException("team with id " + teamId + " not found");
+            }
+        } catch (NoSuchElementException e) {
             throw new InformationNotFoundException("team with id " + teamId + " not found");
         }
     }
