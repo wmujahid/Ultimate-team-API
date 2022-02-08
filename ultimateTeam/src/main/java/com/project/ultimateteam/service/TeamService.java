@@ -168,11 +168,19 @@ public class TeamService {
     }
 
     public Coach createCoach(Long teamId, Coach coachObject) {
-        try{
-            Optional team = teamRepository.findById(teamId);
-            coachObject.setTeam((Team) team.get());
-            return coachRepository.save(coachObject);
-        } catch (NoSuchElementException e){
+        try {
+            Optional<Team> team = teamRepository.findById(teamId);
+            if (team.isPresent()) {
+                if (team.get().getCoach() != null) {
+                    throw new InformationExistException("a coach for the team with id " + teamId + " already exists");
+                } else {
+                    coachObject.setTeam(team.get());
+                    return coachRepository.save(coachObject);
+                }
+            } else {
+                throw new InformationNotFoundException("team with id " + teamId + " not found");
+            }
+        } catch (NoSuchElementException e) {
             throw new InformationNotFoundException("team with id " + teamId + " not found");
         }
     }
@@ -190,7 +198,7 @@ public class TeamService {
         Optional<Team> team = teamRepository.findById(teamId);
         if (team.isPresent()) {
             Optional<Coach> coach = coachRepository.findByTeamId(teamId).stream().filter(
-                    p -> p.getId().equals(coachId)).findFirst();
+                    c -> c.getId().equals(coachId)).findFirst();
             if (coach.isEmpty()) {
                 throw new InformationNotFoundException("coach with id " + coachId + " not found");
             } else {
@@ -204,7 +212,7 @@ public class TeamService {
     public Coach updateCoach(Long teamId, Long coachId, Coach coachObject) {
         try {
             Coach coach = (coachRepository.findByTeamId(
-                    teamId).stream().filter(p -> p.getId().equals(coachId)).findFirst()).get();
+                    teamId).stream().filter(c -> c.getId().equals(coachId)).findFirst()).get();
             coach.setName(coachObject.getName());
             coach.setNationality(coachObject.getNationality());
             coach.setAge(coachObject.getAge());
@@ -218,7 +226,7 @@ public class TeamService {
     public void deleteCoach(Long teamId, Long coachId) {
         try {
             Coach coach = (coachRepository.findByTeamId(
-                    teamId).stream().filter(p -> p.getId().equals(coachId)).findFirst()).get();
+                    teamId).stream().filter(c -> c.getId().equals(coachId)).findFirst()).get();
             coachRepository.deleteById(coach.getId());
         } catch (NoSuchElementException e) {
             throw new InformationNotFoundException("coach or team not found");
@@ -248,7 +256,7 @@ public class TeamService {
         Optional<Team> team = teamRepository.findById(teamId);
         if (team.isPresent()) {
             Optional<Stadium> stadium = stadiumRepository.findByTeamId(teamId).stream().filter(
-                    p -> p.getId().equals(stadiumId)).findFirst();
+                    s -> s.getId().equals(stadiumId)).findFirst();
             if (stadium.isEmpty()) {
                 throw new InformationNotFoundException("stadium with id " + stadiumId + " not found");
             } else {
@@ -262,7 +270,7 @@ public class TeamService {
     public Stadium updateStadium(Long teamId, Long stadiumId, Stadium stadiumObject) {
         try {
             Stadium stadium = (stadiumRepository.findByTeamId(
-                    teamId).stream().filter(p -> p.getId().equals(stadiumId)).findFirst()).get();
+                    teamId).stream().filter(s -> s.getId().equals(stadiumId)).findFirst()).get();
             stadium.setName(stadiumObject.getName());
             stadium.setCity(stadiumObject.getCity());
             stadium.setSeatingCapacity(stadiumObject.getSeatingCapacity());
@@ -275,7 +283,7 @@ public class TeamService {
     public void deleteStadium(Long teamId, Long stadiumId) {
         try {
             Stadium stadium = (stadiumRepository.findByTeamId(
-                    teamId).stream().filter(p -> p.getId().equals(stadiumId)).findFirst()).get();
+                    teamId).stream().filter(s -> s.getId().equals(stadiumId)).findFirst()).get();
             stadiumRepository.deleteById(stadium.getId());
         } catch (NoSuchElementException e) {
             throw new InformationNotFoundException("stadium or team not found");
